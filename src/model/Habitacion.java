@@ -45,6 +45,6 @@ public class Habitacion {
     
     @Override
     public String toString() {
-        return "Habitación " + numero + " - " + tipo + " (" + estado + ")";
+        return "Habitación " + numero + " - " + tipo +" - "+ descripcion + " (" + estado + ")";
     }
 }
