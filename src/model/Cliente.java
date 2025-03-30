@@ -31,9 +31,9 @@ public class Cliente {
         return historialReservas;
     }
 
-    public void agregarReserva(Reserva reserva){
+    public void agregarReserva(Reserva reserva) throws IllegalStateException {
         if (reservasActivas.size() >= 3) {
-            throw new IllegalStateException("El cliente ya tiene 3 reservas activas");
+            throw new IllegalStateException("El cliente ya tiene 3 reservas activas. No puede realizar más reservas.");
         }
         reservasActivas.add(reserva);
     }

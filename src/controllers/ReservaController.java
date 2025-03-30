@@ -21,32 +21,35 @@ public class ReservaController {
         this.clienteController = clienteController;
     }
 
-    public Reserva crearReserva(String idReserva, int numeroHabitacion, String idCliente, 
-                              LocalDate checkIn, LocalDate checkOut) 
-            throws ReservaNoDisponibleException, ClienteNoEncontradoException {
-        
+    public Reserva crearReserva(String idReserva, int numeroHabitacion, String idCliente, LocalDate checkIn, LocalDate checkOut) throws ReservaNoDisponibleException, ClienteNoEncontradoException {
+
         Habitacion habitacion = habitacionController.buscarHabitacionPorNumero(numeroHabitacion);
         if (habitacion == null) {
             throw new ReservaNoDisponibleException("Habitación no encontrada");
         }
-        
+
         if (habitacion.getEstado() != Habitacion.Estado.DISPONIBLE) {
             throw new ReservaNoDisponibleException("Habitación no disponible");
         }
-        
+
         if (!estaHabitacionDisponible(habitacion, checkIn, checkOut)) {
             throw new ReservaNoDisponibleException("Habitación ya reservada en esas fechas");
         }
-        
+
         Cliente cliente = clienteController.buscarClientePorId(idCliente);
-        
-        Reserva reserva = new Reserva(idReserva, habitacion, cliente, checkIn, checkOut);
-        
-        habitacion.setEstado(Habitacion.Estado.RESERVADA);
-        cliente.agregarReserva(reserva);
-        reservas.add(reserva);
-        
-        return reserva;
+
+        try {
+            Reserva reserva = new Reserva(idReserva, habitacion, cliente, checkIn, checkOut);
+
+            habitacion.setEstado(Habitacion.Estado.RESERVADA);
+            cliente.agregarReserva(reserva);
+            reservas.add(reserva);
+
+            return reserva;
+        } catch (IllegalStateException e) {
+           
+            throw new ReservaNoDisponibleException(e.getMessage());
+        }
     }
 
     public void cancelarReserva(String idReserva) throws ReservaNoDisponibleException {

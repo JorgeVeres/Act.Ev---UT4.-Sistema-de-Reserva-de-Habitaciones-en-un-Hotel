@@ -1,5 +1,6 @@
 package view;
 
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -83,7 +84,13 @@ public class HotelView {
     }
 
     public void mostrarError(String error) {
-        System.err.println("\nERROR: " + error);
+        System.err.println("\n⚠️ ERROR: " + error);
+        System.out.println("Presione Enter para continuar...");
+        try {
+            System.in.read();
+        } catch (IOException e) {
+        // Ignorar excepción al leer Enter
+     }
     }
 
     public void mostrarTiposHabitacion() {
@@ -99,4 +106,5 @@ public class HotelView {
             System.out.println(estado.name());
         }
     }
+    
 }
