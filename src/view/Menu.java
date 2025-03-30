@@ -201,30 +201,25 @@ public class Menu {
     }
 
     private void menuReservas() {
-        int opcion = 0;
+        int opcion;
         do {
-            try {
-                vista.mostrarMenuReservas();
-                opcion = leerEntero();
-                
-                switch (opcion) {
-                    case 1:
-                        crearReserva();
-                        break;
-                    case 2:
-                        cancelarReserva();
-                        break;
-                    case 3:
-                        vista.mostrarReservas(reservaController.listarReservas());
-                        break;
-                    case 0:
-                        break;
-                    default:
-                        vista.mostrarError("Opción no válida");
-                }
-            } catch (Exception e) {
-                vista.mostrarError("Error: " + e.getMessage());
-                // El bucle continúa después de mostrar el error
+            vista.mostrarMenuReservas();
+            opcion = leerEntero();
+            
+            switch (opcion) {
+                case 1:
+                    crearReserva();
+                    break;
+                case 2:
+                    cancelarReserva();
+                    break;
+                case 3:
+                    vista.mostrarReservas(reservaController.listarReservas());
+                    break;
+                case 0:
+                    break;
+                default:
+                    vista.mostrarError("Opción no válida");
             }
         } while (opcion != 0);
     }
@@ -243,6 +238,7 @@ public class Menu {
             vista.mostrarMensaje("Ingrese la fecha de check-out (formato YYYY-MM-DD):");
             LocalDate checkOut = leerFecha();
             
+            // Generar ID de reserva simple (en un sistema real sería más robusto)
             String idReserva = "RES-" + System.currentTimeMillis();
             
             Reserva reserva = reservaController.crearReserva(
@@ -253,7 +249,6 @@ public class Menu {
             
         } catch (ReservaNoDisponibleException | ClienteNoEncontradoException e) {
             vista.mostrarError(e.getMessage());
-            // No relanzamos la excepción, solo mostramos el mensaje
         } catch (DateTimeParseException e) {
             vista.mostrarError("Formato de fecha incorrecto. Use YYYY-MM-DD");
         } catch (IllegalArgumentException e) {
